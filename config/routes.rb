@@ -9,6 +9,13 @@ Rails.application.routes.draw do
   		resources :genre
   		resources :users	
       resources :book_comments
+      mount_devise_token_auth_for 'User', at: 'auth' , controllers: {
+        registrations:      'api/v1/user/registrations'
+      }
+
+      # devise_scope :user do
+      #   post 'users/auth/sign_up', to: 'devise_token_auth/registrations#create'
+      # end
 
   		get '/users/:id/books', to: 'book_shelves#show_books'
   		get '/books/:id/users', to: 'book_shelves#show_users'

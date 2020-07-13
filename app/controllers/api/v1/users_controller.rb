@@ -23,30 +23,30 @@ class Api::V1::UsersController < ApplicationController
 		}, status: :ok
 	end
 
-	def create
-		user = User.create(user_params)
-		# user.role = "USER"
-		if user.save
-			UserProfile.create(:user_id => user.id)
-			render json: {
-				status: 'Success', 
-				message: 'User created successfully', 
-				data: user.as_json(include: {
-					user_profile: {
-						:only => [:user_phone, :pic_path]
-					}
-				})
-			},
-			status: :ok
-		else
-			render json: {
-				status: 'Error',
-				message: 'Error occurred while creating User',
-				data: user.errors
-			},
-			status: :unprocessable_entity
-		end
-	end
+	# def create
+	# 	user = User.create(user_params)
+	# 	# user.role = "USER"
+	# 	if user.save
+	# 		UserProfile.create(:user_id => user.id)
+	# 		render json: {
+	# 			status: 'Success', 
+	# 			message: 'User created successfully', 
+	# 			data: user.as_json(include: {
+	# 				user_profile: {
+	# 					:only => [:user_phone, :pic_path]
+	# 				}
+	# 			})
+	# 		},
+	# 		status: :ok
+	# 	else
+	# 		render json: {
+	# 			status: 'Error',
+	# 			message: 'Error occurred while creating User',
+	# 			data: user.errors
+	# 		},
+	# 		status: :unprocessable_entity
+	# 	end
+	# end
 
 	def destroy
 		user = User.find(params[:id])
@@ -67,6 +67,6 @@ class Api::V1::UsersController < ApplicationController
 
 	private
 	def user_params
-		params.permit(:first_name, :last_name, :email, :username, :encrypted_password, :role)
+		params.permit(:first_name, :last_name, :email, :username, :password, :role)
 	end
 end

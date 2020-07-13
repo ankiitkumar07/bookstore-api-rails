@@ -1,5 +1,18 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
-	has_one :user_profile, dependent: :destroy
+	extend Devise::Models
+
+
+	# has_secure_password
+
+	# Include default devise modules. Others available are:
+	# :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+	devise :database_authenticatable, :registerable,
+	     :recoverable, :rememberable, :validatable
+	include DeviseTokenAuth::Concerns::User
+
+	has_one	 :user_profile, dependent: :destroy
 	has_many :books, through: :book_shelves
 	has_many :book_comments
 
@@ -18,9 +31,19 @@ class User < ApplicationRecord
 				presence: true, 
 				length: {minimum: 2}, 
 				uniqueness: {message: "username is not available. please select another username"}
-	validates :encrypted_password,
-				presence: true,
+	validates :password,
+				# presence: true,
 				length: {in: 8..20}
 	validates :role, inclusion: { in: %w(USER ADMIN SUPERADMIN),
 						meesage: "%{value} is not a valid role"}
+
+
+	def as_json(options={})
+  	super(
+  		:include => {
+  			:user_profile => {
+  				:only => [:pic_path]
+  			}
+  		})
+  end
 end

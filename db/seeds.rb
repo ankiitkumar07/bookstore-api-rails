@@ -39,7 +39,7 @@
 # 		username: Faker::Internet.user_name,
 # 		email: Faker::Internet.free_email,
 # 		encrypted_password: Faker::Internet.password(6),
-# 		role: "ADMIN"
+# 		role: "USER"
 # 	})
 # end
 # users = User.all
